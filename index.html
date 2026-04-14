@@ -1,1 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>A Buff & Beyond — Mobile Detailing</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#06060a;color:#eeeef2;font-family:'Barlow',sans-serif;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#06060a}::-webkit-scrollbar-thumb{background:#252530;border-radius:3px}
+@keyframes fu{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.6;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.05)}}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 clamp(16px,4vw,60px);transition:all .4s}
+nav.scrolled{background:rgba(6,6,10,0.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.05)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{cursor:pointer;display:flex;align-items:center;gap:10px}
+.logo-name{font-family:'Oswald',sans-serif;font-size:15px;font-weight:700;letter-spacing:2px;color:#eeeef2;text-transform:uppercase}
+.logo-sub{font-size:9px;font-weight:500;letter-spacing:3px;color:#5e5e6e;text-transform:uppercase}
+.nav-links{display:flex;gap:6px;align-items:center}
+.nav-link{background:none;border:none;color:#b0b0bc;font-family:'Barlow',sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;padding:8px 14px;border-radius:4px;transition:all .3s}
+.nav-link.active{background:rgba(33,150,243,0.12);color:#2196F3}
+.nav-book{background:#2196F3;border:none;color:#eeeef2;font-family:'Barlow',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;padding:8px 18px;border-radius:4px;margin-left:4px}
+.hamburger{background:none;border:none;color:#eeeef2;cursor:pointer;padding:4px;display:none}
+.mobile-menu{position:fixed;inset:0;z-index:999;background:rgba(6,6,10,0.97);display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.mobile-menu.open{display:flex}
+.mob-link{background:none;border:none;color:#eeeef2;font-family:'Oswald',sans-serif;font-size:26px;font-weight:500;letter-spacing:4px;text-transform:uppercase;cursor:pointer;padding:14px 40px;border-radius:8px}
+.mob-book{background:#2196F3;border:none;color:#eeeef2;font-family:'Oswald',sans-serif;font-size:26px;font-weight:500;letter-spacing:4px;text-transform:uppercase;cursor:pointer;padding:14px 40px;border-radius:8px;margin-top:8px}
+@media(max-width:768px){.nav-links{display:none!important}.hamburger{display:flex!important}}
+.page{display:none}.page.active{display:block}
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden;padding:100px 20px 60px;background:radial-gradient(ellipse at 50% 20%,rgba(33,150,243,0.07) 0%,transparent 60%),#06060a}
+.hero-grid{position:absolute;inset:0;opacity:.03;background-image:linear-gradient(#2196F3 1px,transparent 1px),linear-gradient(90deg,#2196F3 1px,transparent 1px);background-size:80px 80px}
+.hero-glow{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(33,150,243,0.1) 0%,transparent 70%);top:5%;left:50%;transform:translateX(-50%);animation:pulse 5s ease-in-out infinite}
+.hero-content{position:relative;z-index:1;max-width:760px}
+.hero-tag{font-size:12px;font-weight:600;letter-spacing:6px;color:#2196F3;text-transform:uppercase;margin-bottom:20px;animation:fu .8s ease both}
+h1{font-family:'Oswald',sans-serif;font-size:clamp(44px,9vw,88px);font-weight:700;letter-spacing:-1px;color:#eeeef2;text-transform:uppercase;line-height:1;margin:0 0 6px;animation:fu .8s ease .12s both}
+.hero-desc{font-size:clamp(15px,2.5vw,19px);color:#b0b0bc;line-height:1.6;max-width:520px;margin:22px auto 36px;animation:fu .8s ease .25s both}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;animation:fu .8s ease .38s both}
+.btn-primary{background:#2196F3;color:#eeeef2;border:none;font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;letter-spacing:3px;text-transform:uppercase;padding:15px 38px;border-radius:4px;cursor:pointer;box-shadow:0 0 30px rgba(33,150,243,0.25)}
+.btn-outline{background:transparent;color:#b0b0bc;border:1px solid #252530;font-family:'Oswald',sans-serif;font-size:15px;font-weight:500;letter-spacing:3px;text-transform:uppercase;padding:15px 38px;border-radius:4px;cursor:pointer}
+.hero-stats{position:relative;z-index:1;display:flex;gap:clamp(20px,5vw,60px);margin-top:44px;flex-wrap:wrap;justify-content:center;animation:fu .8s ease .6s both}
+.stat-n{font-family:'Oswald',sans-serif;font-size:30px;font-weight:700;color:#2196F3;text-align:center}
+.stat-l{font-size:11px;font-weight:500;letter-spacing:3px;color:#5e5e6e;text-transform:uppercase;text-align:center}
+.sh-tag{color:#2196F3;font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;margin-bottom:8px}
+.sh-title{font-family:'Oswald',sans-serif;font-size:clamp(26px,5vw,40px);font-weight:700;letter-spacing:2px;color:#eeeef2;text-transform:uppercase;margin:0}
+.cowboys{padding:80px 20px;background:linear-gradient(135deg,#001a3a 0%,#002a5c 50%,#001a3a 100%);position:relative;overflow:hidden}
+.cw-dots-bg{position:absolute;inset:0;opacity:.04;background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:40px 40px}
+.cw-line{position:absolute;left:0;right:0;height:4px;background:linear-gradient(90deg,transparent,#869397,#fff,#869397,transparent)}
+.cw-inner{max-width:1100px;margin:0 auto;position:relative;z-index:1;text-align:center}
+.cw-badge{display:inline-flex;align-items:center;gap:10px;background:rgba(134,147,151,0.15);border:1px solid rgba(134,147,151,0.3);border-radius:30px;padding:6px 20px;margin-bottom:16px;font-size:11px;font-weight:700;letter-spacing:4px;color:#c8d0d4;text-transform:uppercase}
+.cw-title{font-family:'Oswald',sans-serif;font-size:clamp(24px,5vw,42px);font-weight:700;letter-spacing:2px;color:#fff;text-transform:uppercase;margin:0 0 14px}
+.cw-desc{font-size:15px;color:#a0b0bc;max-width:520px;margin:0 auto;line-height:1.7}
+.carousel{display:flex;align-items:center;gap:16px;justify-content:center;margin-top:36px}
+.car-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.car-track{display:flex;gap:14px;overflow:hidden;max-width:820px;width:100%}
+.car-slide{transition:all .4s ease;border-radius:14px;overflow:hidden}
+.car-slide.center{flex:0 0 50%;opacity:1;transform:scale(1);border:2px solid rgba(134,147,151,0.6);box-shadow:0 8px 40px rgba(0,0,0,0.5);cursor:default}
+.car-slide.side{flex:0 0 25%;opacity:.45;transform:scale(.92);border:1px solid rgba(255,255,255,0.08);cursor:pointer}
+.car-img{position:relative;padding-bottom:100%}
+.car-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top}
+.car-cap{position:absolute;bottom:0;left:0;right:0;padding:28px 16px 14px;background:linear-gradient(transparent,rgba(0,10,30,0.85));font-size:12px;font-weight:600;letter-spacing:2px;color:#c8d0d4;text-transform:uppercase}
+.cw-dots{display:flex;justify-content:center;gap:8px;margin-top:20px}
+.cw-dot{height:8px;border-radius:4px;cursor:pointer;transition:all .3s;background:rgba(255,255,255,0.2)}
+.cw-dot.active{width:24px!important;background:#869397}
+.cw-dot:not(.active){width:8px}
+.svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:40px}
+.svc-card{background:#111117;border-radius:12px;padding:28px;border:1px solid rgba(255,255,255,0.05);position:relative}
+.svc-card.pop{border-color:#2196F3;box-shadow:0 0 40px rgba(33,150,243,0.08)}
+.pop-badge{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:#2196F3;color:#eeeef2;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:3px 14px;border-radius:0 0 6px 6px}
+.svc-time{font-size:11px;font-weight:600;letter-spacing:2px;color:#5e5e6e;text-transform:uppercase;margin-bottom:6px}
+.svc-name{font-family:'Oswald',sans-serif;font-size:22px;font-weight:600;letter-spacing:1px;color:#eeeef2;text-transform:uppercase;margin-bottom:6px}
+.svc-price{font-family:'Oswald',sans-serif;font-size:34px;font-weight:700;color:#2196F3;margin-bottom:20px}
+.svc-feats{display:flex;flex-direction:column;gap:10px}
+.svc-feat{display:flex;align-items:center;gap:8px;font-size:13px;color:#b0b0bc}
+.svc-btn{width:100%;margin-top:24px;padding:12px 0;color:#eeeef2;font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;letter-spacing:3px;text-transform:uppercase;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.svc-btn.p{background:#2196F3;border:none}
+.svc-btn.r{background:transparent;border:1px solid #252530}
+.rev-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:36px}
+.rev-card{background:#111117;border-radius:12px;padding:24px;border:1px solid rgba(255,255,255,0.05)}
+.rev-text{font-size:14px;color:#b0b0bc;line-height:1.7;margin:0 0 14px;font-style:italic}
+.rev-name{font-family:'Oswald',sans-serif;font-size:13px;font-weight:500;letter-spacing:1px;color:#eeeef2}
+.gal-tabs{display:flex;gap:4px;margin-top:28px;margin-bottom:32px;background:#111117;border-radius:8px;padding:4px;width:fit-content;flex-wrap:wrap}
+.gal-tab{background:transparent;border:none;color:#5e5e6e;font-family:'Barlow',sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:9px 18px;border-radius:6px;cursor:pointer;transition:all .3s}
+.gal-tab.active{background:#2196F3;color:#eeeef2}
+.gal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.gal-item{border-radius:10px;overflow:hidden;cursor:pointer;position:relative;padding-bottom:75%;border:1px solid rgba(255,255,255,0.05)}
+.gal-item img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.gal-overlay{position:absolute;bottom:0;left:0;right:0;padding:24px 14px 12px;background:linear-gradient(transparent,rgba(0,0,0,0.8))}
+.slider-wrap{position:relative;width:100%;padding-bottom:66%;border-radius:12px;overflow:hidden;cursor:ew-resize;touch-action:none;background:#111117;user-select:none}
+.sl-after{position:absolute;inset:0}
+.sl-after img{width:100%;height:100%;object-fit:cover;pointer-events:none}
+.sl-before{position:absolute;top:0;left:0;bottom:0;overflow:hidden}
+.sl-before img{position:absolute;top:0;left:0;height:100%;object-fit:cover;pointer-events:none}
+.sl-line{position:absolute;top:0;bottom:0;width:3px;background:#eeeef2;z-index:10;pointer-events:none}
+.sl-handle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.95);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,0.5)}
+.sl-lbl{position:absolute;top:10px;padding:3px 10px;border-radius:16px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;z-index:5;background:rgba(0,0,0,0.7)}
+.con-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:36px}
+.con-card{background:#111117;border-radius:12px;padding:22px;border:1px solid rgba(255,255,255,0.05)}
+.con-card.link{cursor:pointer}
+.con-lbl{font-size:10px;font-weight:700;letter-spacing:2px;color:#5e5e6e;text-transform:uppercase;margin-bottom:4px}
+.con-val{font-family:'Oswald',sans-serif;font-size:16px;font-weight:500;color:#eeeef2}
+.con-sub{font-size:12px;color:#5e5e6e;margin-top:4px}
+.book-box{background:#111117;border-radius:14px;padding:36px 28px;margin-top:36px;border:1px solid rgba(255,255,255,0.05);text-align:center}
+.addon-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:16px}
+.addon{background:#111117;border-radius:8px;padding:16px 20px;border:1px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;align-items:center}
+.view-more{margin-top:20px;background:none;border:1px solid #252530;color:#b0b0bc;font-family:'Barlow',sans-serif;font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:10px 24px;border-radius:6px;cursor:pointer}
+.lightbox{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.92);display:none;align-items:center;justify-content:center;padding:20px}
+.lightbox.open{display:flex}
+.lb-inner{max-width:700px;width:100%;position:relative}
+.lb-inner img{width:100%;border-radius:12px;display:block}
+.lb-close{position:absolute;top:-40px;right:0;background:none;border:none;color:#eeeef2;cursor:pointer;font-family:'Oswald',sans-serif;font-size:14px;font-weight:500;letter-spacing:2px}
+footer{background:#0b0b10;border-top:1px solid rgba(255,255,255,0.05);padding:44px 20px 22px}
+.ft-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:28px;margin-bottom:32px}
+.ft-brand{font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;letter-spacing:2px;color:#eeeef2;text-transform:uppercase;margin-bottom:8px}
+.ft-lbl{font-size:10px;font-weight:700;letter-spacing:3px;color:#5e5e6e;text-transform:uppercase;margin-bottom:14px}
+.ft-link{font-size:13px;color:#b0b0bc;cursor:pointer;margin-bottom:7px;display:block}
+.ft-text{font-size:13px;color:#b0b0bc;margin-bottom:6px}
+.ft-ig{display:inline-flex;align-items:center;gap:6px;color:#2196F3;cursor:pointer;font-size:13px}
+.ft-bottom{border-top:1px solid rgba(255,255,255,0.05);padding-top:20px;text-align:center;max-width:1100px;margin:0 auto}
+</style>
+</head>
+<body>
 
+<nav id="nav">
+  <div class="nav-inner">
+    <div class="logo" onclick="goTo('home')">
+      <div>
+        <div class="logo-name">A Buff <span style="color:#2196F3">&</span> Beyond</div>
+        <div class="logo-sub">Mobile Detailing</div>
+      </div>
+    </div>
+    <div class="nav-links">
+      <button class="nav-link active" id="nl-home" onclick="goTo('home')">Home</button>
+      <button class="nav-link" id="nl-services" onclick="goTo('services')">Services</button>
+      <button class="nav-link" id="nl-gallery" onclick="goTo('gallery')">Gallery</button>
+      <button class="nav-link" id="nl-contact" onclick="goTo('contact')">Contact</button>
+      <button class="nav-book" onclick="bookNow()">Book Now</button>
+    </div>
+    <button class="hamburger" onclick="toggleMenu()">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mob">
+  <button class="mob-link" onclick="goTo('home');toggleMenu()">Home</button>
+  <button class="mob-link" onclick="goTo('services');toggleMenu()">Services</button>
+  <button class="mob-link" onclick="goTo('gallery');toggleMenu()">Gallery</button>
+  <button class="mob-link" onclick="goTo('contact');toggleMenu()">Contact</button>
+  <button class="mob-book" onclick="bookNow();toggleMenu()">Book Now</button>
+</div>
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <div class="hero-tag">Mobile Detailing & Car Wash</div>
+      <h1>A Buff <span style="color:#2196F3">&</span> Beyond</h1>
+      <p class="hero-desc">Premium mobile detailing that comes to you. Showroom-quality results in your driveway, office, or anywhere you need us.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="bookNow()">Book Now</button>
+        <button class="btn-outline" onclick="goTo('gallery')">See Our Work</button>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-n">500+</div><div class="stat-l">Cars Detailed</div></div>
+      <div><div class="stat-n">5★</div><div class="stat-l">Avg Rating</div></div>
+      <div><div class="stat-n">100%</div><div class="stat-l">Satisfaction</div></div>
+    </div>
+  </section>
+
+  <!-- COWBOYS -->
+  <section class="cowboys">
+    <div class="cw-dots-bg"></div>
+    <div class="cw-line" style="top:0"></div>
+    <div class="cw-inner">
+      <div class="cw-badge">⭐ Notable Clients ⭐</div>
+      <h2 class="cw-title">Proud to Serve the<br/><span style="color:#869397">Dallas Cowboys</span></h2>
+      <p class="cw-desc">Proud to serve Dallas Cowboys players with our top-notch mobile car detailing services!</p>
+      <div class="carousel">
+        <button class="car-btn" onclick="cwPrev()">&#8249;</button>
+        <div class="car-track" id="carTrack"></div>
+        <button class="car-btn" onclick="cwNext()">&#8250;</button>
+      </div>
+      <div class="cw-dots" id="cwDots"></div>
+      <div style="text-align:center;margin-top:32px">
+        <button class="btn-primary" onclick="bookNow()">Book Your Detail</button>
+      </div>
+    </div>
+    <div class="cw-line" style="bottom:0"></div>
+  </section>
+
+  <!-- SERVICES PREVIEW -->
+  <section style="padding:60px 20px;max-width:1100px;margin:0 auto">
+    <div class="sh-tag">What We Do</div><h2 class="sh-title">Our Services</h2>
+    <div class="svc-grid">
+      <div class="svc-card" onclick="bookNow()" style="cursor:pointer"><div class="svc-time">1 hr</div><div class="svc-name">Exterior Only Wash</div><div class="svc-price">$95</div></div>
+      <div class="svc-card" onclick="bookNow()" style="cursor:pointer"><div class="svc-time">1 hr 45 min</div><div class="svc-name">Light Detail</div><div class="svc-price">$125–$175</div></div>
+      <div class="svc-card" onclick="bookNow()" style="cursor:pointer"><div class="svc-time">2 hr 30 min</div><div class="svc-name">Interior Only Detail</div><div class="svc-price">$120–$250</div></div>
+      <div class="svc-card pop" onclick="bookNow()" style="cursor:pointer"><div class="pop-badge">Most Popular</div><div class="svc-time">2 hr 30 min</div><div class="svc-name">Superior Detail – SUV</div><div class="svc-price">$250</div></div>
+    </div>
+    <button class="view-more" onclick="goTo('services')">View All Services →</button>
+  </section>
+
+  <!-- REVIEWS -->
+  <section style="padding:40px 20px 80px;max-width:1100px;margin:0 auto">
+    <div class="sh-tag">Testimonials</div><h2 class="sh-title">What Clients Say</h2>
+    <div class="rev-grid">
+      <div class="rev-card"><div style="margin-bottom:12px">⭐⭐⭐⭐⭐</div><p class="rev-text">"This is the best car detailing service around!! Josh solved both my problems. My car looked just like it did when I drove it off the lot! I am a happy customer for life!"</p><div class="rev-name">— Abbigail Moore</div></div>
+      <div class="rev-card"><div style="margin-bottom:12px">⭐⭐⭐⭐⭐</div><p class="rev-text">"They came to my house and detailed my truck, fast and easy and looks like a brand new interior!"</p><div class="rev-name">— Blake McCollum</div></div>
+      <div class="rev-card"><div style="margin-bottom:12px">⭐⭐⭐⭐⭐</div><p class="rev-text">"Outstanding customer service and amazing detailing work. Would highly recommend Josh."</p><div class="rev-name">— Tyler Cearns</div></div>
+      <div class="rev-card"><div style="margin-bottom:12px">⭐⭐⭐⭐⭐</div><p class="rev-text">"Detail oriented and professional, what more can you ask for! Will be a returning customer."</p><div class="rev-name">— Kendall White</div></div>
+      <div class="rev-card"><div style="margin-bottom:12px">⭐⭐⭐⭐⭐</div><p class="rev-text">"Excellent service on all accounts and very friendly, will definitely use Josh on a regular basis."</p><div class="rev-name">— Ian Boyle</div></div>
+      <div class="rev-card"><div style="margin-bottom:12px">⭐⭐⭐⭐⭐</div><p class="rev-text">"He does awesome work. I recommend his work for anything you need done."</p><div class="rev-name">— Vickie Boyle</div></div>
+    </div>
+  </section>
+
+  <section style="padding:80px 20px;text-align:center;background:radial-gradient(ellipse at center,rgba(33,150,243,0.08) 0%,transparent 60%)">
+    <h2 style="font-family:'Oswald',sans-serif;font-size:clamp(28px,5vw,44px);font-weight:700;letter-spacing:2px;color:#eeeef2;text-transform:uppercase;margin:0 0 14px">Ready for a Showroom Shine?</h2>
+    <p style="font-size:15px;color:#5e5e6e;margin-bottom:28px;max-width:420px;margin-left:auto;margin-right:auto">Book your appointment and experience the difference.</p>
+    <button class="btn-primary" onclick="bookNow()" style="font-size:17px;padding:16px 44px">Book Now</button>
+  </section>
+</div>
+
+<!-- SERVICES -->
+<div class="page" id="page-services">
+  <section style="padding:110px 20px 80px;max-width:1100px;margin:0 auto">
+    <div class="sh-tag">What We Offer</div><h2 class="sh-title">Services & Pricing</h2>
+    <div class="svc-grid">
+      <div class="svc-card"><div class="svc-time">1 hr</div><div class="svc-name">Exterior Only Wash</div><div class="svc-price">$95</div><div class="svc-feats"><div class="svc-feat">✓ Hand wash & dry</div><div class="svc-feat">✓ Wheel deep clean</div><div class="svc-feat">✓ Tire dressing</div><div class="svc-feat">✓ Window cleaning</div></div><button class="svc-btn r" onclick="bookNow()">Book This Service</button></div>
+      <div class="svc-card"><div class="svc-time">1 hr 45 min</div><div class="svc-name">Light Detail</div><div class="svc-price">$125–$175</div><div class="svc-feats"><div class="svc-feat">✓ Interior detail</div><div class="svc-feat">✓ Exterior hand wash</div><div class="svc-feat">✓ Wheel deep clean</div><div class="svc-feat">✓ 6-month sealant</div></div><button class="svc-btn r" onclick="bookNow()">Book This Service</button></div>
+      <div class="svc-card"><div class="svc-time">2 hr 30 min</div><div class="svc-name">Interior Only Detail</div><div class="svc-price">$120–$250</div><div class="svc-feats"><div class="svc-feat">✓ Deep clean & steam</div><div class="svc-feat">✓ Vacuuming & shampooing</div><div class="svc-feat">✓ Steam cleaning</div><div class="svc-feat">✓ Odor treatment</div></div><button class="svc-btn r" onclick="bookNow()">Book This Service</button></div>
+      <div class="svc-card"><div class="svc-time">2 hr 30 min</div><div class="svc-name">Superior Detail – Sedan</div><div class="svc-price">$195</div><div class="svc-feats"><div class="svc-feat">✓ Full interior & exterior</div><div class="svc-feat">✓ Hand wash & dry</div><div class="svc-feat">✓ Wheel cleaning</div><div class="svc-feat">✓ Interior deep clean</div></div><button class="svc-btn r" onclick="bookNow()">Book This Service</button></div>
+      <div class="svc-card"><div class="svc-time">2 hr 30 min</div><div class="svc-name">Superior Detail – Coupe</div><div class="svc-price">$150</div><div class="svc-feats"><div class="svc-feat">✓ Full interior & exterior</div><div class="svc-feat">✓ Hand wash & dry</div><div class="svc-feat">✓ Wheel cleaning</div><div class="svc-feat">✓ Interior deep clean</div></div><button class="svc-btn r" onclick="bookNow()">Book This Service</button></div>
+      <div class="svc-card"><div class="svc-time">3 hr 30 min</div><div class="svc-name">Superior Detail – Crossover</div><div class="svc-price">$225</div><div class="svc-feats"><div class="svc-feat">✓ Full interior & exterior</div><div class="svc-feat">✓ Hand wash & dry</div><div class="svc-feat">✓ Wheel cleaning</div><div class="svc-feat">✓ Interior deep clean</div></div><button class="svc-btn r" onclick="bookNow()">Book This Service</button></div>
+      <div class="svc-card pop"><div class="pop-badge">Most Popular</div><div class="svc-time">2 hr 30 min</div><div class="svc-name">Superior Detail – SUV</div><div class="svc-price">$250</div><div class="svc-feats"><div class="svc-feat">✓ Full interior & exterior</div><div class="svc-feat">✓ Hand wash & dry</div><div class="svc-feat">✓ Wheel cleaning</div><div class="svc-feat">✓ Interior deep clean</div></div><button class="svc-btn p" onclick="bookNow()">Book This Service</button></div>
+      <div class="svc-card"><div class="svc-time">3 hr</div><div class="svc-name">Superior Detail – Truck</div><div class="svc-price">$275</div><div class="svc-feats"><div class="svc-feat">✓ Full interior & exterior</div><div class="svc-feat">✓ Hand wash & dry</div><div class="svc-feat">✓ Wheel cleaning</div><div class="svc-feat">✓ Interior deep clean</div></div><button class="svc-btn r" onclick="bookNow()">Book This Service</button></div>
+      <div class="svc-card"><div class="svc-time">5 hr 30 min</div><div class="svc-name">Rejuvenation Detail</div><div class="svc-price">$425–$550</div><div class="svc-feats"><div class="svc-feat">✓ Neglected/heavily used vehicles</div><div class="svc-feat">✓ Most intensive clean</div><div class="svc-feat">✓ Full steam treatment</div><div class="svc-feat">✓ Deep stain removal</div></div><button class="svc-btn r" onclick="bookNow()">Book This Service</button></div>
+    </div>
+    <div style="margin-top:56px">
+      <div class="sh-tag">Extras</div><h2 class="sh-title" style="font-size:26px">Add-Ons</h2>
+      <div class="addon-grid">
+        <div class="addon"><div><span style="font-size:13px;color:#b0b0bc;display:block">Kid Car Seat – Deep Clean</span><span style="font-size:11px;color:#5e5e6e">30 min</span></div><span style="font-family:'Oswald',sans-serif;font-size:17px;font-weight:600;color:#2196F3">$30</span></div>
+      </div>
+      <div style="margin-top:36px;text-align:center"><button class="btn-primary" onclick="bookNow()" style="font-size:17px;padding:16px 44px">Schedule Your Detail</button></div>
+    </div>
+  </section>
+</div>
+
+<!-- GALLERY -->
+<div class="page" id="page-gallery">
+  <section style="padding:110px 20px 80px;max-width:1100px;margin:0 auto">
+    <div class="sh-tag">Our Work</div><h2 class="sh-title">Gallery</h2>
+    <div class="gal-tabs">
+      <button class="gal-tab active" onclick="galTab('ba',this)">Before & After</button>
+      <button class="gal-tab" onclick="galTab('photos',this)">Photos</button>
+      <button class="gal-tab" onclick="galTab('video',this)">Video</button>
+    </div>
+    <div id="gal-ba">
+      <div style="display:flex;flex-direction:column;gap:40px">
+        <div>
+          <div class="slider-wrap" id="sl1"><div class="sl-after"><img src="photos/king-ranch-after.jpeg" alt=""/></div><div class="sl-before" id="slb1" style="width:50%"><img id="slbi1" src="photos/king-ranch-before.jpeg" alt=""/></div><div class="sl-line" id="sll1" style="left:50%"><div class="sl-handle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.5" stroke-linecap="round"><polyline points="8 4 4 12 8 20"/><polyline points="16 4 20 12 16 20"/></svg></div></div><div class="sl-lbl" style="left:10px;color:#ff5252">Before</div><div class="sl-lbl" style="right:10px;color:#2196F3">After</div></div>
+          <div style="font-family:'Oswald',sans-serif;font-size:18px;color:#eeeef2;text-transform:uppercase;margin-top:14px">Ford King Ranch — Pet Hair Removal</div>
+          <p style="font-size:14px;color:#5e5e6e;margin-top:4px">Carpet covered in pet hair → spotless deep-cleaned carpet</p>
+        </div>
+        <div>
+          <div class="slider-wrap" id="sl2"><div class="sl-after"><img src="photos/audi-q8-after.jpeg" alt=""/></div><div class="sl-before" id="slb2" style="width:50%"><img id="slbi2" src="photos/audi-q8-before.jpeg" alt=""/></div><div class="sl-line" id="sll2" style="left:50%"><div class="sl-handle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.5" stroke-linecap="round"><polyline points="8 4 4 12 8 20"/><polyline points="16 4 20 12 16 20"/></svg></div></div><div class="sl-lbl" style="left:10px;color:#ff5252">Before</div><div class="sl-lbl" style="right:10px;color:#2196F3">After</div></div>
+          <div style="font-family:'Oswald',sans-serif;font-size:18px;color:#eeeef2;text-transform:uppercase;margin-top:14px">Audi Q8 — Interior Detail</div>
+          <p style="font-size:14px;color:#5e5e6e;margin-top:4px">Trash & spills on floor mats → pristine interior restored</p>
+        </div>
+        <div>
+          <div class="slider-wrap" id="sl3"><div class="sl-after"><img src="photos/carseat-after.jpeg" alt=""/></div><div class="sl-before" id="slb3" style="width:50%"><img id="slbi3" src="photos/carseat-before.jpeg" alt=""/></div><div class="sl-line" id="sll3" style="left:50%"><div class="sl-handle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.5" stroke-linecap="round"><polyline points="8 4 4 12 8 20"/><polyline points="16 4 20 12 16 20"/></svg></div></div><div class="sl-lbl" style="left:10px;color:#ff5252">Before</div><div class="sl-lbl" style="right:10px;color:#2196F3">After</div></div>
+          <div style="font-family:'Oswald',sans-serif;font-size:18px;color:#eeeef2;text-transform:uppercase;margin-top:14px">Kid Car Seat — Deep Clean</div>
+          <p style="font-size:14px;color:#5e5e6e;margin-top:4px">Dirty car seat → spotless & sanitized for your child</p>
+        </div>
+      </div>
+    </div>
+    <div id="gal-photos" style="display:none">
+      <div style="display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap">
+        <button class="gal-tab active" style="border-radius:20px;padding:7px 16px" onclick="galFilter('All',this)">All</button>
+        <button class="gal-tab" style="border-radius:20px;padding:7px 16px" onclick="galFilter('Exterior',this)">Exterior</button>
+        <button class="gal-tab" style="border-radius:20px;padding:7px 16px" onclick="galFilter('Interior',this)">Interior</button>
+      </div>
+      <div class="gal-grid" id="galGrid"></div>
+    </div>
+    <div id="gal-video" style="display:none">
+      <div style="border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);max-width:700px">
+        <video controls playsinline style="width:100%;display:block;background:#0b0b10"><source src="photos/detail-video.mp4" type="video/mp4"/></video>
+        <div style="padding:16px 20px;background:#111117"><div style="font-family:'Oswald',sans-serif;font-size:18px;color:#eeeef2;text-transform:uppercase">Detailing in Action</div></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lb-inner" onclick="event.stopPropagation()">
+    <img id="lbImg" src="" alt=""/>
+    <div id="lbTitle" style="font-family:'Oswald',sans-serif;font-size:20px;color:#eeeef2;text-transform:uppercase;margin-top:12px"></div>
+    <button class="lb-close" onclick="closeLightbox()">CLOSE ✕</button>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="page" id="page-contact">
+  <section style="padding:110px 20px 80px;max-width:800px;margin:0 auto">
+    <div class="sh-tag">Get In Touch</div><h2 class="sh-title">Contact Us</h2>
+    <div class="con-grid">
+      <div class="con-card"><div style="font-size:24px;margin-bottom:14px">📞</div><div class="con-lbl">Call or Text</div><div class="con-val">(972) 481-0413</div><div class="con-sub">Mon–Fri 9am–7pm</div></div>
+      <div class="con-card"><div style="font-size:24px;margin-bottom:14px">✉️</div><div class="con-lbl">Email</div><div class="con-val">info@abuffandbeyond.com</div><div class="con-sub">Reply within 24 hrs</div></div>
+      <div class="con-card link" onclick="window.open('https://www.instagram.com/abuff_and_beyond_detailing','_blank')"><div style="font-size:24px;margin-bottom:14px">📸</div><div class="con-lbl">Instagram</div><div class="con-val">@abuff_and_beyond_detailing</div><div class="con-sub">13.4K followers</div></div>
+      <div class="con-card"><div style="font-size:24px;margin-bottom:14px">🕐</div><div class="con-lbl">Hours</div><div class="con-val">Mon–Fri 9:00 AM – 7:00 PM</div><div class="con-sub">Sat & Sun: Closed</div></div>
+    </div>
+    <div class="book-box">
+      <div style="font-size:32px">📅</div>
+      <h3 style="font-family:'Oswald',sans-serif;font-size:22px;color:#eeeef2;text-transform:uppercase;margin:16px 0 10px">Ready to Book?</h3>
+      <p style="font-size:14px;color:#5e5e6e;margin-bottom:24px">Use our Square booking system to pick your service, date, and time.</p>
+      <button class="btn-primary" onclick="bookNow()" style="font-size:16px;padding:15px 40px">Book Your Appointment</button>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="ft-grid">
+    <div>
+      <div class="ft-brand">A Buff <span style="color:#2196F3">&</span> Beyond</div>
+      <p style="font-size:13px;color:#5e5e6e;line-height:1.6">Premium mobile detailing. Showroom results, anywhere.</p>
+    </div>
+    <div>
+      <div class="ft-lbl">Pages</div>
+      <div class="ft-link" onclick="goTo('home')">Home</div>
+      <div class="ft-link" onclick="goTo('services')">Services</div>
+      <div class="ft-link" onclick="goTo('gallery')">Gallery</div>
+      <div class="ft-link" onclick="goTo('contact')">Contact</div>
+    </div>
+    <div>
+      <div class="ft-lbl">Contact</div>
+      <div class="ft-text">(972) 481-0413</div>
+      <div class="ft-text">info@abuffandbeyond.com</div>
+      <div class="ft-text">Mon–Fri 9am–7pm | Sat & Sun Closed</div>
+      <div class="ft-ig" onclick="window.open('https://www.instagram.com/abuff_and_beyond_detailing','_blank')">📸 @abuff_and_beyond_detailing</div>
+    </div>
+    <div>
+      <div class="ft-lbl">Book Now</div>
+      <button class="btn-primary" onclick="bookNow()" style="font-size:13px;padding:10px 20px">Schedule Online</button>
+    </div>
+  </div>
+  <div class="ft-bottom"><p style="font-size:11px;color:#5e5e6e">© 2026 A Buff & Beyond Mobile Detailing. All rights reserved.</p></div>
+</footer>
+
+<script>
+const BOOKING="https://book.squareup.com/appointments/faq2irluso72u5/location/LDNQ4Y6DWXGMJ/services";
+function bookNow(){window.open(BOOKING,'_blank');}
+window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50);});
+function goTo(p){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(el=>el.classList.remove('active'));
+  const nl=document.getElementById('nl-'+p);
+  if(nl)nl.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+let menuOpen=false;
+function toggleMenu(){menuOpen=!menuOpen;document.getElementById('mob').classList.toggle('open',menuOpen);}
+[1,2,3].forEach(i=>{
+  const wrap=document.getElementById('sl'+i);
+  if(!wrap)return;
+  let drag=false;
+  const move=(cx)=>{
+    const r=wrap.getBoundingClientRect();
+    const pct=Math.max(0,Math.min((cx-r.left)/r.width,1))*100;
+    document.getElementById('slb'+i).style.width=pct+'%';
+    document.getElementById('sll'+i).style.left=pct+'%';
+    const bi=document.getElementById('slbi'+i);
+    if(bi)bi.style.width=r.width+'px';
+  };
+  wrap.addEventListener('mousedown',e=>{drag=true;move(e.clientX);});
+  wrap.addEventListener('touchstart',e=>{drag=true;move(e.touches[0].clientX);},{passive:true});
+  window.addEventListener('mouseup',()=>drag=false);
+  window.addEventListener('mousemove',e=>{if(drag)move(e.clientX);});
+  window.addEventListener('touchend',()=>drag=false);
+  window.addEventListener('touchmove',e=>{if(drag){e.preventDefault();move(e.touches[0].clientX);}},{passive:false});
+});
+const CW=[
+  {src:'photos/cowboys1.jpeg',cap:'Dallas Cowboys Client'},
+  {src:'photos/cowboys2.jpeg',cap:'Dallas Cowboys Client'},
+  {src:'photos/cowboys3.jpeg',cap:'Dallas Cowboys Client'},
+  {src:'photos/cowboys4.jpeg',cap:'Dallas Cowboys Client'},
+  {src:'photos/cowboys5.jpeg',cap:'Dallas Cowboys Client'},
+  {src:'photos/cowboys6.jpeg',cap:'Dallas Cowboys Client'},
+];
+let cwIdx=0;
+function renderCW(){
+  const track=document.getElementById('carTrack');
+  const dots=document.getElementById('cwDots');
+  track.innerHTML=[-1,0,1].map(o=>{
+    const i=(cwIdx+o+CW.length)%CW.length;
+    const c=o===0;
+    return`<div class="car-slide ${c?'center':'side'}" ${!c?'onclick="cwGoto('+i+')"':''}>
+      <div class="car-img"><img src="${CW[i].src}" alt=""/>
+      ${c?'<div class="car-cap">'+CW[i].cap+'</div>':''}
+      </div></div>`;
+  }).join('');
+  dots.innerHTML=CW.map((_,i)=>`<div class="cw-dot ${i===cwIdx?'active':''}" onclick="cwGoto(${i})"></div>`).join('');
+}
+function cwNext(){cwIdx=(cwIdx+1)%CW.length;renderCW();}
+function cwPrev(){cwIdx=(cwIdx-1+CW.length)%CW.length;renderCW();}
+function cwGoto(i){cwIdx=i;renderCW();}
+renderCW();
+const GAL=[
+  {src:'photos/camaro-ss.jpeg',title:'Camaro SS',tag:'Exterior'},
+  {src:'photos/gwagon-holographic.jpeg',title:'G-Wagon Holographic',tag:'Exterior'},
+  {src:'photos/gwagon-white.jpeg',title:'G-Wagon White',tag:'Exterior'},
+  {src:'photos/range-rover.jpeg',title:'Range Rover Sport',tag:'Exterior'},
+  {src:'photos/defender.jpeg',title:'Land Rover Defender',tag:'Exterior'},
+  {src:'photos/porsche-cayenne-interior1.jpeg',title:'Porsche Cayenne GTS',tag:'Interior'},
+  {src:'photos/porsche-cayenne-interior2.jpeg',title:'Porsche Cayenne GTS',tag:'Interior'},
+  {src:'photos/gmc-interior.jpeg',title:'GMC Yukon',tag:'Interior'},
+  {src:'photos/gmc-driver.jpeg',title:'GMC Yukon Driver',tag:'Interior'},
+  {src:'photos/gmc-console.jpeg',title:'GMC Console',tag:'Interior'},
+  {src:'photos/boat1.jpeg',title:'Boat Detail — Dashboard',tag:'Interior'},
+  {src:'photos/boat2.jpeg',title:'Boat Detail — Full Interior',tag:'Interior'},
+];
+let curFilter='All';
+function renderGallery(){
+  const g=curFilter==='All'?GAL:GAL.filter(p=>p.tag===curFilter);
+  document.getElementById('galGrid').innerHTML=g.map(p=>`
+    <div class="gal-item" onclick="openLightbox('${p.src}','${p.title} — ${p.tag}')">
+      <img src="${p.src}" alt="${p.title}"/>
+      <div class="gal-overlay">
+        <div style="font-family:'Oswald',sans-serif;font-size:14px;color:#eeeef2;text-transform:uppercase">${p.title}</div>
+        <div style="font-size:11px;color:#2196F3;text-transform:uppercase;margin-top:2px">${p.tag}</div>
+      </div>
+    </div>`).join('');
+}
+function galFilter(f,btn){
+  curFilter=f;
+  document.querySelectorAll('#gal-photos .gal-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGallery();
+}
+function galTab(t,btn){
+  document.querySelectorAll('.gal-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('gal-ba').style.display=t==='ba'?'block':'none';
+  document.getElementById('gal-photos').style.display=t==='photos'?'block':'none';
+  document.getElementById('gal-video').style.display=t==='video'?'block':'none';
+  if(t==='photos')renderGallery();
+}
+function openLightbox(src,title){
+  document.getElementById('lbImg').src=src;
+  document.getElementById('lbTitle').textContent=title;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
+</script>
+</body>
+</html>
